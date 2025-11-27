@@ -11,16 +11,13 @@ type Module struct {
 	Service Service
 }
 
-func NewModule(userRepo user.Repository) *Module {
-	service := NewService(userRepo)
-	handler := NewHandler(service)
-
-	return &Module{
-		Handler: handler,
-		Service: service,
-	}
+type Dependencies struct {
+	UserRepository user.Repository // interface
 }
 
-func (m *Module) RegisterRoutes(r *gin.RouterGroup) {
-	RegisterRoutes(r, m.Handler)
+func NewModule(r *gin.RouterGroup, deps *Dependencies) {
+	service := NewService(deps.UserRepository)
+	handler := NewHandler(service)
+
+	RegisterRoutes(r, handler)
 }
