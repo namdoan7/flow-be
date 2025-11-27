@@ -1,8 +1,9 @@
-package order
+package handler
 
 import (
 	"go-be/internal/common/response"
 	"go-be/internal/modules/order/dto"
+	"go-be/internal/modules/order/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,10 +11,10 @@ import (
 )
 
 type Handler struct {
-	service Service
+	service service.Service
 }
 
-func NewHandler(service Service) *Handler {
+func NewHandler(service service.Service) *Handler {
 	return &Handler{service: service}
 }
 

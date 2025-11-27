@@ -1,12 +1,14 @@
-package user
+package repository
 
 import (
+	"go-be/internal/modules/user/model"
+
 	"gorm.io/gorm"
 )
 
 type Repository interface {
-	Create(user *User) error
-	FindByEmail(email string) (*User, error)
+	Create(user *model.User) error
+	FindByEmail(email string) (*model.User, error)
 }
 
 type repository struct {
@@ -17,12 +19,12 @@ func NewRepository(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
-func (r *repository) Create(user *User) error {
+func (r *repository) Create(user *model.User) error {
 	return r.db.Create(user).Error
 }
 
-func (r *repository) FindByEmail(email string) (*User, error) {
-	var user User
+func (r *repository) FindByEmail(email string) (*model.User, error) {
+	var user model.User
 	err := r.db.Where("email = ?", email).First(&user).Error
 	return &user, err
 }

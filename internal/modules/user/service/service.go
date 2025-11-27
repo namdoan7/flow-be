@@ -1,7 +1,9 @@
-package user
+package service
 
 import (
 	"go-be/internal/common/utils"
+	"go-be/internal/modules/user/model"
+	"go-be/internal/modules/user/repository"
 )
 
 type Service interface {
@@ -9,10 +11,10 @@ type Service interface {
 }
 
 type service struct {
-	repo Repository
+	repo repository.Repository
 }
 
-func NewService(repo Repository) Service {
+func NewService(repo repository.Repository) Service {
 	return &service{repo: repo}
 }
 
@@ -22,7 +24,7 @@ func (s *service) Register(name, email, password string) error {
 		return err
 	}
 
-	user := &User{
+	user := &model.User{
 		Name:     name,
 		Email:    email,
 		Password: hashedPassword,

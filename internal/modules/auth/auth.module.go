@@ -1,14 +1,17 @@
 package auth
 
 import (
+	"go-be/internal/modules/auth/handler"
+	"go-be/internal/modules/auth/router"
+	"go-be/internal/modules/auth/service"
 	"go-be/internal/modules/user"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Module struct {
-	Handler *Handler
-	Service Service
+	Handler *handler.Handler
+	Service service.Service
 }
 
 type Dependencies struct {
@@ -16,8 +19,8 @@ type Dependencies struct {
 }
 
 func NewModule(r *gin.RouterGroup, deps *Dependencies) {
-	service := NewService(deps.UserRepository)
-	handler := NewHandler(service)
+	svc := service.NewService(deps.UserRepository)
+	h := handler.NewHandler(svc)
 
-	RegisterRoutes(r, handler)
+	router.RegisterRoutes(r, h)
 }

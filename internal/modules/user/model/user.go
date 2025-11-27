@@ -1,4 +1,4 @@
-package order
+package model
 
 import (
 	"time"
@@ -7,11 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type Order struct {
+type User struct {
 	ID        uuid.UUID `gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
-	UserID    uuid.UUID `gorm:"type:uuid;not null"`
-	Total     float64   `gorm:"not null"`
-	Status    string    `gorm:"type:varchar(50);default:'pending'"`
+	Name      string    `gorm:"type:varchar(100);not null"`
+	Email     string    `gorm:"type:varchar(100);uniqueIndex;not null"`
+	Password  string    `gorm:"type:varchar(255);not null"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
