@@ -14,7 +14,7 @@ type UserData struct {
 }
 
 func init() {
-	dispatcher.NewDispatcher().Register("UserCreatedEvent", handleUserCreated)
+	dispatcher.GetDispatcher().RegisterHandler("UserCreatedEvent", handleUserCreated)
 }
 
 func handleUserCreated(data any, db *gorm.DB) {

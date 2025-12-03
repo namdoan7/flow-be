@@ -14,7 +14,7 @@ type Dispatcher struct {
 
 func NewDispatcher(db *gorm.DB) *Dispatcher {
 	return &Dispatcher{
-		Dispatcher: dispatcher.NewDispatcher(),
+		Dispatcher: dispatcher.GetDispatcher(),
 		db:         db,
 	}
 }

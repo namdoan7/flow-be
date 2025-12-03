@@ -13,22 +13,12 @@ type Dispatcher struct {
 	mu       sync.RWMutex
 }
 
-func NewDispatcherInit() *Dispatcher {
-	return &Dispatcher{
+var defaultDispatcher *Dispatcher
+
+func init() {
+	defaultDispatcher = &Dispatcher{
 		handlers: make(map[string][]HandlerFunc),
 	}
-}
-
-var (
-	defaultDispatcher *Dispatcher
-	once              sync.Once
-)
-
-func NewDispatcher() *Dispatcher {
-	once.Do(func() {
-		defaultDispatcher = NewDispatcherInit()
-	})
-	return defaultDispatcher
 }
 
 // Emit event với data
@@ -39,7 +29,11 @@ func (d *Dispatcher) GetHandler(eventName string) []HandlerFunc {
 }
 
 // Register handler
-func (d *Dispatcher) Register(eventName string, h HandlerFunc) {
+func GetDispatcher() *Dispatcher {
+	return defaultDispatcher
+}
+
+func (d *Dispatcher) RegisterHandler(eventName string, h HandlerFunc) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	d.handlers[eventName] = append(d.handlers[eventName], h)
