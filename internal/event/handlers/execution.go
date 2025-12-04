@@ -16,9 +16,9 @@ func init() {
 }
 
 func handleExecutionCreated(data any, emitter eventcore.Emitter) {
-	fmt.Printf("[Handler] ExecutionData")
+	fmt.Printf("[Handler] ExecutionData \n")
 	emitter.Emit("UserCreatedEvent", map[string]interface{}{
-		"ID":   101,
+		"ID":   1012,
 		"Name": "Alice",
 	})
 }
