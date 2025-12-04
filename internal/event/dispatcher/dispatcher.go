@@ -6,7 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type HandlerFunc func(data interface{}, db *gorm.DB)
+type HandlerFunc func(data interface{}, db *gorm.DB, emitter Emitter)
+
+type Emitter interface {
+	Emit(eventName string, data interface{})
+	EmitSync(eventName string, data interface{})
+}
 
 type Dispatcher struct {
 	handlers map[string][]HandlerFunc

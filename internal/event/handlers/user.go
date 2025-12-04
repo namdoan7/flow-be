@@ -17,7 +17,7 @@ func init() {
 	dispatcher.GetDispatcher().RegisterHandler("UserCreatedEvent", handleUserCreated)
 }
 
-func handleUserCreated(data any, db *gorm.DB) {
+func handleUserCreated(data any, db *gorm.DB, emitter dispatcher.Emitter) {
 	var user UserData
 	mapstructure.Decode(data, &user) // decode bất kỳ map/object sang struct
 

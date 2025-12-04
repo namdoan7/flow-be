@@ -23,11 +23,15 @@ func (w *Worker) Run() {
 	dispatcher := event.NewEvent(w.db)
 
 	// Emit event
-	dispatcher.Emit("UserCreatedEvent", map[string]interface{}{
+	dispatcher.Emit("flow.execution", map[string]interface{}{
 		"ID":   101,
 		"Name": "Alice",
 	})
 
 	log.Println("Worker started...")
 	// Add worker logic here
+}
+
+func (w *Worker) GetExecution(executionId string) {
+
 }

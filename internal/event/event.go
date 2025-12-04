@@ -11,20 +11,20 @@ import (
 )
 
 type Event struct {
-	*dispatcher.Dispatcher
-	db *gorm.DB
+	dispatcher *dispatcher.Dispatcher
+	db         *gorm.DB
 }
 
 func NewEvent(db *gorm.DB) *Event {
 	return &Event{
-		Dispatcher: dispatcher.GetDispatcher(),
+		dispatcher: dispatcher.GetDispatcher(),
 		db:         db,
 	}
 }
 
 // Emit event với data
 func (d *Event) Emit(eventName string, data interface{}) {
-	handlers := d.GetHandler(eventName)
+	handlers := d.dispatcher.GetHandler(eventName)
 	for _, h := range handlers {
 		go func(handler dispatcher.HandlerFunc) {
 			defer func() {
@@ -32,14 +32,14 @@ func (d *Event) Emit(eventName string, data interface{}) {
 					log.Printf("Panic recovered in event handler: %v\n%s", r, debug.Stack())
 				}
 			}()
-			handler(data, d.db) // truyền db vào handler
+			handler(data, d.db, d) // truyền db vào handler
 		}(h)
 	}
 }
 
 // EmitSync emits an event and waits for all handlers to complete.
 func (d *Event) EmitSync(eventName string, data interface{}) {
-	handlers := d.GetHandler(eventName)
+	handlers := d.dispatcher.GetHandler(eventName)
 	var wg sync.WaitGroup
 	for _, h := range handlers {
 		wg.Add(1)
@@ -50,7 +50,7 @@ func (d *Event) EmitSync(eventName string, data interface{}) {
 					log.Printf("Panic recovered in event handler: %v\n%s", r, debug.Stack())
 				}
 			}()
-			handler(data, d.db)
+			handler(data, d.db, d)
 		}(h)
 	}
 	wg.Wait()
