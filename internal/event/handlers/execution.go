@@ -2,9 +2,8 @@ package handlers
 
 import (
 	"fmt"
-	"go-be/internal/event/dispatcher"
-
-	"gorm.io/gorm"
+	"go-be/internal/event/bus"
+	"go-be/internal/event/eventcore"
 )
 
 type ExecutionData struct {
@@ -13,12 +12,12 @@ type ExecutionData struct {
 }
 
 func init() {
-	dispatcher.GetDispatcher().RegisterHandler("flow.execution", handleExecutionCreated)
+	bus.GetDispatcher().RegisterHandler("flow.execution", handleExecutionCreated)
 }
 
-func handleExecutionCreated(data any, db *gorm.DB, event dispatcher.Emitter) {
+func handleExecutionCreated(data any, emitter eventcore.Emitter) {
 	fmt.Printf("[Handler] ExecutionData")
-	event.Emit("UserCreatedEvent", map[string]interface{}{
+	emitter.Emit("UserCreatedEvent", map[string]interface{}{
 		"ID":   101,
 		"Name": "Alice",
 	})

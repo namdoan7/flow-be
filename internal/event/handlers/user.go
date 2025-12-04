@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"fmt"
-	"go-be/internal/event/dispatcher"
+	"go-be/internal/common/utils"
+	"go-be/internal/event/bus"
+	"go-be/internal/event/eventcore"
 
 	"github.com/mitchellh/mapstructure"
-	"gorm.io/gorm"
 )
 
 type UserData struct {
@@ -14,16 +14,12 @@ type UserData struct {
 }
 
 func init() {
-	dispatcher.GetDispatcher().RegisterHandler("UserCreatedEvent", handleUserCreated)
+	bus.GetDispatcher().RegisterHandler("UserCreatedEvent", handleUserCreated)
 }
 
-func handleUserCreated(data any, db *gorm.DB, emitter dispatcher.Emitter) {
+func handleUserCreated(data any, emitter eventcore.Emitter) {
 	var user UserData
-	mapstructure.Decode(data, &user) // decode bất kỳ map/object sang struct
+	mapstructure.Decode(data, &user)
 
-	// if db != nil {
-	// 	db.Create(&user)
-	// }
-
-	fmt.Printf("[Handler] User created: ID=%d, Name=%s\n", user.ID, user.Name)
+	utils.PrintJSON("UserCreatedEvent", user)
 }

@@ -20,7 +20,7 @@ func NewWorker(db *gorm.DB) *Worker {
 
 func (w *Worker) Run() {
 	// Dispatcher singleton với DB injected
-	dispatcher := event.NewEvent(w.db)
+	dispatcher := event.NewPublisher(w.db)
 
 	// Emit event
 	dispatcher.Emit("flow.execution", map[string]interface{}{
