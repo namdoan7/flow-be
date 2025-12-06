@@ -3,7 +3,7 @@ package handlers
 import (
 	"go-be/internal/common/utils"
 	"go-be/internal/event/bus"
-	"go-be/internal/event/eventcore"
+	"go-be/internal/event/types"
 
 	"github.com/mitchellh/mapstructure"
 )
@@ -17,7 +17,7 @@ func init() {
 	bus.GetDispatcher().RegisterHandler("UserCreatedEvent", handleUserCreated)
 }
 
-func handleUserCreated(data any, emitter eventcore.Emitter) {
+func handleUserCreated(data any, emitter types.Emitter) {
 	var user UserData
 	mapstructure.Decode(data, &user)
 

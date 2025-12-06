@@ -2,8 +2,8 @@ package event
 
 import (
 	"go-be/internal/event/bus"
-	"go-be/internal/event/eventcore"
 	_ "go-be/internal/event/handlers"
+	"go-be/internal/event/types"
 	"log"
 	"runtime/debug"
 	"sync"
@@ -31,7 +31,7 @@ func (d *Publisher) GetDB() *gorm.DB {
 func (d *Publisher) Emit(eventName string, data interface{}) {
 	handlers := d.dispatcher.GetHandler(eventName)
 	for _, h := range handlers {
-		go func(handler eventcore.HandlerFunc) {
+		go func(handler types.HandlerFunc) {
 			defer func() {
 				if r := recover(); r != nil {
 					log.Printf("Panic recovered in event handler: %v\n%s", r, debug.Stack())
@@ -48,7 +48,7 @@ func (d *Publisher) EmitSync(eventName string, data interface{}) {
 	var wg sync.WaitGroup
 	for _, h := range handlers {
 		wg.Add(1)
-		go func(handler eventcore.HandlerFunc) {
+		go func(handler types.HandlerFunc) {
 			defer wg.Done()
 			defer func() {
 				if r := recover(); r != nil {
@@ -59,4 +59,12 @@ func (d *Publisher) EmitSync(eventName string, data interface{}) {
 		}(h)
 	}
 	wg.Wait()
+}
+
+func (d *Publisher) Execution(executionId string, data any) {
+	d.Emit("UserCreatedEvent", map[string]interface{}{
+		"ID":   1012,
+		"Name": "Alice",
+	})
+
 }

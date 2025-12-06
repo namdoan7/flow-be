@@ -1,13 +1,12 @@
 package bus
 
 import (
+	"go-be/internal/event/types"
 	"sync"
-
-	"go-be/internal/event/eventcore"
 )
 
 type Dispatcher struct {
-	handlers map[string][]eventcore.HandlerFunc
+	handlers map[string][]types.HandlerFunc
 	mu       sync.RWMutex
 }
 
@@ -15,12 +14,12 @@ var defaultDispatcher *Dispatcher
 
 func init() {
 	defaultDispatcher = &Dispatcher{
-		handlers: make(map[string][]eventcore.HandlerFunc),
+		handlers: make(map[string][]types.HandlerFunc),
 	}
 }
 
 // Emit event với data
-func (d *Dispatcher) GetHandler(eventName string) []eventcore.HandlerFunc {
+func (d *Dispatcher) GetHandler(eventName string) []types.HandlerFunc {
 	d.mu.RLock()
 	defer d.mu.RUnlock()
 	return d.handlers[eventName]
@@ -31,7 +30,7 @@ func GetDispatcher() *Dispatcher {
 	return defaultDispatcher
 }
 
-func (d *Dispatcher) RegisterHandler(eventName string, h eventcore.HandlerFunc) {
+func (d *Dispatcher) RegisterHandler(eventName string, h types.HandlerFunc) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	d.handlers[eventName] = append(d.handlers[eventName], h)
