@@ -3,11 +3,13 @@ package handlers
 import (
 	"go-be/internal/event/bus"
 	"go-be/internal/event/types"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 type ExecutionData struct {
-	ID   int
-	Name string
+	FlowId string      `json:"FlowId" desc:"Tên sự kiện (VD: UserCreatedEvent)"`
+	Data   interface{} `json:"data" desc:"Tên sự kiện (VD: UserCreatedEvent)"`
 }
 
 func init() {
@@ -15,5 +17,9 @@ func init() {
 }
 
 func handleExecutionCreated(data any, emitter types.Emitter) {
-	emitter.Execution("abc", data)
+	var eData ExecutionData
+	mapstructure.Decode(data, &eData)
+
+	emitter.Execution(eData.FlowId, eData.Data)
+	emitter.GetEventItemDescription(ExecutionData{})
 }
