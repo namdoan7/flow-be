@@ -8,7 +8,7 @@ run:
 
 build:
 	mkdir -p bin
-	go build -o $(BIN) ./cmd/api
+	go build  -ldflags="-s -w" -o $(BIN) ./cmd/api
 
 clean:
 	rm -rf bin
