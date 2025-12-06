@@ -6,7 +6,6 @@ import (
 	_ "go-be/internal/event/handlers"
 	"go-be/internal/event/types"
 	"log"
-	"reflect"
 	"runtime/debug"
 	"sync"
 
@@ -27,22 +26,6 @@ func NewPublisher(db *gorm.DB) *Publisher {
 
 func (d *Publisher) GetDB() *gorm.DB {
 	return d.db
-}
-
-func (d *Publisher) GetEventItemDescription(v interface{}) map[string]string {
-	t := reflect.TypeOf(v)
-	if t.Kind() == reflect.Ptr {
-		t = t.Elem()
-	}
-
-	desc := map[string]string{}
-	for i := 0; i < t.NumField(); i++ {
-		f := t.Field(i)
-		desc[f.Name] = f.Tag.Get("desc")
-	}
-
-	utils.PrintJSON("ItemDescription", desc)
-	return desc
 }
 
 // Emit event với data
@@ -103,6 +86,9 @@ func (d *Publisher) EmitArrayParallel(events []types.EventItem) {
 }
 
 func (d *Publisher) Execution(flowId string, data any) {
+	a := d.dispatcher.GetDocument("flow.execution")
+	utils.PrintJSON("flow.execution", a)
+
 	d.Emit("UserCreatedEvent", map[string]interface{}{
 		"ID":   1012,
 		"Name": "Alice",
