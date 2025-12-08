@@ -2,6 +2,7 @@ package route
 
 import (
 	"go-be/internal/modules/auth"
+	"go-be/internal/modules/flow"
 	"go-be/internal/modules/order"
 	"go-be/internal/modules/user"
 
@@ -25,6 +26,7 @@ func Mount(db *gorm.DB) *gin.Engine {
 	user.NewModule(v1, &user.Dependencies{DB: db})
 	auth.NewModule(v1, &auth.Dependencies{UserRepository: userRepo})
 	order.NewModule(v1, &order.Dependencies{DB: db})
+	flow.NewModule(v1, &flow.Dependencies{DB: db})
 
 	return r
 }
