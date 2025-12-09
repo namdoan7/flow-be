@@ -85,6 +85,15 @@ func (d *Publisher) EmitArrayParallel(events []types.EventItem) {
 	wg.Wait()
 }
 
+// func (d *Publisher) EmitArrayParallel(events []types.EventItem) {
+// 	funcs := utils.Map(events, func(e types.EventItem) func() (any, error) {
+// 		return func() (any, error) {
+// 			return d.EmitSync(e.Name, e.Data)
+// 		}
+// 	})
+// 	utils.PromiseAllSettled(funcs)
+// }
+
 func (d *Publisher) Execution(flowId string, data any) {
 	a := d.dispatcher.GetDocument("flow.execution")
 	utils.PrintJSON("flow.execution", a)

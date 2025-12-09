@@ -7,8 +7,10 @@ import (
 )
 
 func RegisterRoutes(r *gin.RouterGroup, h *handler.Handler) {
-	orderGroup := r.Group("/flows")
+	flowGroup := r.Group("/flows")
 	{
-		orderGroup.GET("/", h.GetPaginate)
+		flowGroup.GET("/", h.GetPaginate)
+		flowGroup.POST("/", h.CreateFlow)
+		flowGroup.PUT("/:id", h.UpdateFlow)
 	}
 }

@@ -1,7 +1,7 @@
 package dto
 
-type CreateFlowRequest struct {
-	Name       string `json:"name"  binding:"required"`
+type UpdateFlowRequest struct {
+	Name       string `json:"name"`
 	Status     string `json:"status"`
 	DataString string `json:"data_string"`
 }
